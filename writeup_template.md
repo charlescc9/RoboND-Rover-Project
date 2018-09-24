@@ -58,6 +58,16 @@ And another!
 Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
 
 
+### Start
+
+When building the decision tree, looked at many different binary conditions concerning the Rover's state:
+1. Presence of nav_angles: navigable terrain pixels will be present whenever any pixels in the Rover's image are above the (160, 160, 160) theshold.
+This is almost always the case, making absence of nav_angles an edge case. To cover it, I simply stops
+2. The next state variable to consider is mode: forward or stop.
+
+
+### Start
+
 
 ![alt text][image3]
 
