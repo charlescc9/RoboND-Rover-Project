@@ -31,7 +31,7 @@ I used moviepy to create a video and stored it in the output directory.
 #### 1. Fill in the `perception_step()` (at the bottom of the `perception.py` script) and `decision_step()` (in `decision.py`) functions in the autonomous mapping scripts and an explanation is provided in the writeup of how and why these functions were modified as they were.
 
 My modification of the `perception_step()` function closely mirrored my modification of the `process_image()` function. I performed the
-same extraction of the terrain, obstacle, and rock pixels and mapping onto the Rover's worldmap. One addition step was to generate
+same extraction of the terrain, obstacle, and rock pixels and mapping onto the Rover's worldmap. One additional step was to generate
 the Rover's vision_image by displaying the terrain, obstacle, and rock binary images in the B, R, and G channels respectively. Also,
 as opposed to setting pixels to 255 as I did for the vision_image and in `process_image()`, when overplotting on the Rover's worldmap,
 I only incremented by 1 for obstacles and rocks, and 10 for terrain, to make the Rover more confident when perceiving terrain.
@@ -41,10 +41,10 @@ I also modified the `decision_step()` function to allow the Rover to decide whic
 from the `perception_step()` function. I largely adopted the given functionality, but made some adjustments. The logic first checks
 whether the Rover sees navigable terrain pixels (extracted in the `perception_step()` function). If not, it either stops if in forward mode,
 or performs a 4-point turn if in stop mode. In the much more common case where the Rover sees navigable terrain, the next Rover variable
-I consider is mode, either forward or stop. If the Rover is in forward mode, we finally check if there are enough navigable terrain
+I consider is mode, either forward or stop. If the Rover is in forward mode, I finally checked if there are enough navigable terrain
 pixels via the stop_forward property, and if so continue forward, and if not stop the Rover. If the Rover is in stop mode, we first check
 to see if it is actually stopped (velocity <= 0.2), and if not continue to break. If so, however, I then check if there are enough
-navigable terrain pixels to start forward. If so, the Rover starts forward, and is not it turns at a constant steering angle of -15 
+navigable terrain pixels to start forward. If so, the Rover starts forward, and if not it turns at a constant steering angle of -15 
 (experimenting with changing this angle based on the nav_angels sometimes lead to a back-and-forth motion that broke the navigation).
 The critical step that I changed from the given code was also checking the mean nav_angle when deciding to start forward when in stop mode.
 I found that the Rover often began moving too quickly after coming to a stop and ran into obstacles. To fix this, I made sure that the
