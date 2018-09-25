@@ -68,7 +68,16 @@ the Rover's vision_image by displaying the terrain, obstacle, and rock binary im
 I also modified the `decision_step()` function to allow the Rover to decide which actions to take based on the information gathered
 from the `perception_step()` function. I largely adopted the given functionality, but made some adjustments. The logic first checks
 whether the Rover sees navigable terrain pixels (extracted in the `perception_step()` function). If not, it either stops if in forward mode,
-or performs a 4-point turn if in stop mode. In the
+or performs a 4-point turn if in stop mode. In the much more common case where the Rover sees navigable terrain, the next Rover variable
+I consider is mode, either forward or stop. If the Rover is in forward mode, we finally check if there are enough navigable terrain
+pixels via the stop_forward property, and if so continue forward, and if not stop the Rover. If the Rover is in stop mode, we first check
+to see if it is actually stopped (velocity <= 0.2), and if not continue to break. If so, however, we then check if there are enough
+navigable terrain pixels to start forward. If so, we do so, and is not we turn at a constant steering angle of -15 (experimenting with
+changing this angle based on the nav_angels lead to a back-and-forth motion sometimes that essentially broke the navigation).
+The critical step that I changed from the given code was also checking the mean nav_angle when deciding to start forward when in stop mode.
+I found that the Rover often began moving too quickly after coming to a stop and ran into obstacles. To fix this, I made sure that the
+mean nav_angle direction was within the Rover's possible steering range (-15 to 15) before switching to forward mode.
+
 
 #### 2. Launching in autonomous mode your rover can navigate and map autonomously.  Explain your results and how you might improve them in your writeup.  
 
@@ -76,8 +85,23 @@ or performs a 4-point turn if in stop mode. In the
 
 Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
 
+The general approach I used was to flush out the project skeleton that consisted of a Rover which had perception, decision making, and
+action functionality. Designing the solution this way allowed for a very clear delineation and generalization of the Rover's core
+functionality and made it easy to understand and implement all necessary functions. This general approach/pipeline worked very well,
+though each specific aspect may have been improved upon. The action step (giving the Rover throttle, break, and steering angle input)
+was fully constrained by the (simulated) hardware of our Rover, and consequently couldn't really be improved upon in this project.
+However, both the perception and decision making steps could be improved upon in a number of ways, making the final solution much more
+robust. For perception, finding navigable terrain, obstacles, and rocks via color thresholding worked fairly well, but it didn't take
+into account distinctions such as obstacles being both the ridge on the side of the path and big rocks in the path itself, and it
+wouldn't generalize well to other environments that don't have a similar color profile. Utilizing different visual properties in the
+images beyond color, such as object detection, depth, etc., would have almost certainly improved performance. A more modern deep
+learning CNN implementation would be very interesting here. Similarly, implementing the decision making step as a decision tree
+worked fairly well, but was obviously fundamentally limited in the number of potential states it could handle uniquely. Representing
+and traversing the state space in a more sophisticated way would have improved performance greatly. Again, more modern AI techniques,
+including deep reinforcement learning, would be interesting to experiment with.
 
-When building the decision tree, looked at many different binary conditions concerning the Rover's state:
-1. Presence of nav_angles: navigable terrain pixels will be present whenever any pixels in the Rover's image are above the (160, 160, 160) theshold.
-This is almost always the case, making absence of nav_angles an edge case. To cover it, I simply stops
-2. The next state variable to consider is mode: forward or stop.
+However, since the problem was very well defined and tightly constrained, these relatively naive approached worked quite well. With a
+resolution of TODO and an average FPS around 35, I was able to map the environment fairly well, obtained around 75% TODO when mapping
+more than half of the terrain.
+
+FPS and result
