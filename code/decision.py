@@ -42,17 +42,18 @@ def decision_step(Rover):
             else:
 
                 # If enough navigable terrain, start forward
-                if len(Rover.nav_angles) >= Rover.go_forward:
+                # NOTE: only stop turning if pointing fully in the correct direction to avoid getting stuck
+                if len(Rover.nav_angles) >= Rover.go_forward and -15 < np.mean(Rover.nav_angles * 180 / np.pi) < 15:
                     Rover.throttle = Rover.throttle_set
                     Rover.brake = 0
                     Rover.steer = np.clip(np.mean(Rover.nav_angles * 180 / np.pi), -15, 15)
                     Rover.mode = 'forward'
 
-                # If not enough navigable terrain, 4-wheel turn in direction of navigable terrain
+                # If not enough navigable terrain, look around for new direction
                 else:
                     Rover.throttle = 0
                     Rover.brake = 0
-                    Rover.steer = -15 if np.clip(np.mean(Rover.nav_angles * 180 / np.pi), -15, 15) < 0 else 15
+                    Rover.steer = -15
 
     # No navigable terrain pixels
     else:
