@@ -22,7 +22,7 @@
 
 [//]: # (Image References)
 
-[image1]: ./misc/rover_image.jpg
+[image1]: ./dataset/IMG/robocam_2018_09_22_13_41_11_970.jpg
 [image2]: ./calibration_images/example_grid1.jpg
 [image3]: ./calibration_images/example_rock1.jpg 
 
@@ -38,9 +38,16 @@ You're reading it!
 
 ### Notebook Analysis
 #### 1. Run the functions provided in the notebook on test images (first with the test data provided, next on data you have recorded). Add/modify functions to allow for color selection of obstacles and rock samples.
-Here is an example of how to include an image in your writeup.
+After experimenting on the test dataset given, I recorded a new dataset of 404 images, including:
 
 ![alt text][image1]
+
+In order to obtain pixel values for obstacles and rocks, I modified the `color_thresh` function. 
+I first calculated the binary image of the terrain by extracting pixels from the image that were above the given (160, 160, 160) threshold.
+I then calculated the binary image of the obstacles by extracting the inverse pixels as when calculating the terrain, those below (160, 160, 160).
+Finally, I calculated the binary image of the rocks by first converting the images to HSV via `cv2.cvtColor(img, cv2.COLOR_RGB2HSV)` (making sure to use RGB, not BGR), 
+then used the lower and upper bounds of (20, 100, 100) and (30, 255, 255) respectively to extract yellow pixels. 
+I returned all three binary images for use in later functions. 
 
 #### 1. Populate the `process_image()` function with the appropriate analysis steps to map pixels identifying navigable terrain, obstacles and rock samples into a worldmap.  Run `process_image()` on your test data using the `moviepy` functions provided to create video output of your result. 
 And another! 
