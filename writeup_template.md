@@ -101,7 +101,5 @@ and traversing the state space in a more sophisticated way would have improved p
 including deep reinforcement learning, would be interesting to experiment with.
 
 However, since the problem was very well defined and tightly constrained, these relatively naive approached worked quite well. With a
-resolution of TODO and an average FPS around 35, I was able to map the environment fairly well, obtained around 75% TODO when mapping
-more than half of the terrain.
-
-FPS and result
+resolution of 1920 x 1080 and good graphics quality and an average FPS around 35, I was able to map the environment fairly well, 
+obtained greater than 60% fidelity for more than 40% of the map, while locating multiple rocks

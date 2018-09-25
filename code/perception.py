@@ -107,9 +107,6 @@ def perception_step(Rover):
     threshed_terrain, threshed_obstacles, threshed_rock = color_thresh(warped)
 
     # 4) Update Rover.vision_image (this will be displayed on left side of screen)
-    # Example: Rover.vision_image[:,:,0] = obstacle color-thresholded binary image
-    #          Rover.vision_image[:,:,1] = rock_sample color-thresholded binary image
-    #          Rover.vision_image[:,:,2] = navigable terrain color-thresholded binary image
     Rover.vision_image[:, :, 0] = threshed_obstacles * 255
     Rover.vision_image[:, :, 1] = threshed_rock * 255
     Rover.vision_image[:, :, 2] = threshed_terrain * 255
@@ -129,10 +126,7 @@ def perception_step(Rover):
                                               Rover.worldmap.shape[0], scale)
 
     # 7) Update Rover worldmap (to be displayed on right side of screen)
-    # Example: Rover.worldmap[obstacle_y_world, obstacle_x_world, 0] += 1
-    #          Rover.worldmap[rock_y_world, rock_x_world, 1] += 1
-    #          Rover.worldmap[navigable_y_world, navigable_x_world, 2] += 1
-    Rover.worldmap[y_world_obstacles, x_world_obstacles, 0] += 1
+    Rover.worldmap[y_world_obstacles, x_world_obstacles, 0] += 10  # Favor navigable terrain
     Rover.worldmap[y_world_rock, x_world_rock, 1] += 1
     Rover.worldmap[y_world_terrain, x_world_terrain, 2] += 1
 
